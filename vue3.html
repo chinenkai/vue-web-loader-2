@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vue Web Loader 2 Demo Vue3</title>
+    <script src="js/vue@3.2.47.global.prod.js"></script>
+    <script src="js/vue-web-loader-2.js"></script>
+</head>
+<body>
+    <!-- 主要内容 -->
+    <div id="app"></div>
+    <script type="text/javascript">
+        // 请求并执行JS文件
+        VueWebLoader({
+            version: Date.now(), // 加载文件时指定的版本号，通过Date.now()来避免浏览器缓存问题
+            entry: 'view/vue3.js', // 入口文件
+        });
+    </script>
+</body>
+</html>
