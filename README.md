@@ -1,5 +1,9 @@
 # Vue Web Loader 2
 
+## 项目说明
+
+Vue Web Loader 2 可以在不使用前端工具(如npm,webpack等)的情况下，快速构建基于 Vue 的单页面应用，具有以下优点：依赖小、支持vue单页面组件、支持动态加载组件。
+
 ## 使用方式
 
 1、在html页面上引入Vue和vue-web-loader-2.js，并加上Vue程序的挂载点
