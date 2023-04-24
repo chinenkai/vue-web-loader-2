@@ -1,5 +1,19 @@
 (function(window, document, Vue) {
 
+    // 部分浏览器不支持replaceAll函数
+    if (!String.prototype.replaceAll) {
+        String.prototype.replaceAll = function(str, newStr) {
+
+            // 如果是正则表达式
+            if (Object.prototype.toString.call(str).toLowerCase() === '[object regexp]') {
+                return this.replace(str, newStr);
+            }
+
+            // 如果是字符串
+            return this.replace(new RegExp(str, 'g'), newStr);
+        };
+    }
+
     // vue大版本号
     var vue_version = parseInt(Vue.version.split('.')[0]);
     var vue_app = vue_version == 3 ? Vue.createApp() : null;
@@ -420,7 +434,7 @@
         requestGet(entry, function(url, content) {
 
             // 计算base_url
-            base_url = url.substr(0, url.indexOf(entry.replaceAll('../', '').replaceAll('./', '')));
+            base_url = url.substr(0, url.indexOf(entry));
 
             var result = parseImport(url, content);
 
