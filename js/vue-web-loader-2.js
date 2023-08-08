@@ -112,9 +112,7 @@
 
         var regexp = RegExp(/import([\s\S].+)from([\s\S].+["'])/, 'g');
 
-        var matches = script.matchAll(regexp);
-
-        for (var match of matches) {
+        while ((match = regexp.exec(script)) !== null) {
 
             // 匹配到的import代码
             var m_content = match[0];
@@ -208,7 +206,7 @@
 
             if (child.tagName == 'TEMPLATE') {
                 template = child.innerHTML;
-                template = template.replace('inside-script', 'script')
+                template = template.replace('inside-script', 'script');
             } else if (child.tagName == 'STYLE') {
                 style = child.innerHTML.trim();
             }
