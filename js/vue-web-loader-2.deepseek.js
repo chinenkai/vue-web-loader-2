@@ -58,7 +58,11 @@
 
     // Function to remove comments from a script
     function removeComments(script) {
-        return script.replace(/\/\*[\s\S]*?\*\//g, '');
+        // Remove multi-line comments
+        script = script.replace(/\/\*[\s\S]*?\*\//g, '');
+        // Remove single-line comments
+        script = script.replace(/([^\\])\/\/.*/g, '$1');
+        return script;
     }
 
     // Function to parse an absolute URL
