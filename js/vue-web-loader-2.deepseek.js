@@ -11,9 +11,9 @@
 
     // Polyfill for `endsWith`
     if (!String.prototype.endsWith) {
-        String.prototype.endsWith = function(search, this_len) {
-            this_len = this_len === undefined ? this.length : this_len;
-            return this.substring(this_len - search.length, this_len) === search;
+        String.prototype.endsWith = function(search, thisLen) {
+            thisLen = thisLen === undefined ? this.length : thisLen;
+            return this.substring(thisLen - search.length, thisLen) === search;
         };
     }
 
@@ -89,7 +89,7 @@
 
             if (fName.endsWith('.js') || fName.endsWith('.vue')) {
                 var absoluteUrl = parseAbsoluteUrl(fName, parentUrl);
-                scriptCopy = scriptCopy.replace(mContent, prevCode + 'VueWebLoader.registered_component["' + absoluteUrl + '"];\n');
+                scriptCopy = scriptCopy.replace(mContent, prevCode + 'VueWebLoader.registeredComponent["' + absoluteUrl + '"];\n');
                 list.push(absoluteUrl);
                 continue;
             }
@@ -175,11 +175,11 @@
 
         if (style) appendStyle(name, style);
 
-        VueWebLoader.component_template[name] = template;
+        VueWebLoader.componentTemplate[name] = template;
 
         var regexp = /([\S\s]*)export\s+default\s+{([\S\s]*})/g;
         var match = regexp.exec(script);
-        var js = (match[1] ? match[1] : '') + '\n (function(){ return {\n    template: VueWebLoader.component_template["' + name + '"],' + match[2] + '})();';
+        var js = (match[1] ? match[1] : '') + '\n (function(){ return {\n    template: VueWebLoader.componentTemplate["' + name + '"],' + match[2] + '})();';
 
         var setting = evalJs(url, js);
         var component = null;
@@ -191,7 +191,7 @@
             component = Vue.component(name, setting);
         }
 
-        delete VueWebLoader.component_template[name];
+        delete VueWebLoader.componentTemplate[name];
         return component;
     }
 
@@ -211,9 +211,9 @@
             var list = result2.list;
 
             importComponents(url, list, function() {
-                VueWebLoader.registered_component[url] = registerVueSFC(url, template, parsedScript, style);
+                VueWebLoader.registeredComponent[url] = registerVueSFC(url, template, parsedScript, style);
                 checkParentImportProgress(url);
-                if (callback) callback(VueWebLoader.registered_component[url]);
+                if (callback) callback(VueWebLoader.registeredComponent[url]);
             });
         });
     }
@@ -229,11 +229,11 @@
             var list = result.list;
 
             importComponents(url, list, function() {
-                script = '\n window.VueWebLoader.registered_component["' + url + '"] = (function(){\n' +
+                script = '\n window.VueWebLoader.registeredComponent["' + url + '"] = (function(){\n' +
                     script.replace('export default ', 'return ') + '\n})();';
                 evalJs(url, script);
                 checkParentImportProgress(url);
-                if (callback) callback(VueWebLoader.registered_component[url]);
+                if (callback) callback(VueWebLoader.registeredComponent[url]);
             });
         });
     }
@@ -252,7 +252,7 @@
 
         for (var i = 0; i < list.length; i++) {
             var url = list[i];
-            if (VueWebLoader.registered_component[url]) {
+            if (VueWebLoader.registeredComponent[url]) {
                 componentsRelation[parentUrl][url] = true;
                 childUrl = url;
             } else {
@@ -296,8 +296,8 @@
 
     // Expose VueWebLoader to the window object
     window.VueWebLoader = Object.assign(VueWebLoader, {
-        component_template: {},
-        registered_component: {},
+        componentTemplate: {},
+        registeredComponent: {},
         import: function(url, callback) {
             url = parseAbsoluteUrl(url, baseUrl);
             if (url.endsWith('.vue')) {
