@@ -8,7 +8,7 @@ Vue Web Loader 2 可以在不使用前端工具(如npm,webpack等)的情况下�
 
 1、在html页面上引入Vue和vue-web-loader-2.js，并加上Vue程序的挂载点
 ```
-<script src="js/vue@2.7.14.min.js"></script>
+<script src="js/vue.2.7.16.min.js"></script>
 <script src="js/vue-web-loader-2.js"></script>
 
 <!-- 挂载点 -->
