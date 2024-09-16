@@ -300,6 +300,12 @@
         registeredComponent: {},
         import: function(url, callback) {
             url = parseAbsoluteUrl(url, baseUrl);
+
+            if (callback && VueWebLoader.registeredComponent[url]) {
+                callback(VueWebLoader.registeredComponent[url]);
+                return;
+            }
+            
             if (url.endsWith('.vue')) {
                 requestVue(url, callback);
             } else if (url.endsWith('.js')) {

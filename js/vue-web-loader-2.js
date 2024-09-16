@@ -457,6 +457,12 @@
         registered_component: {},
         import: function(url, callback) {
             url = parseAbsoluteUrl(url, base_url);
+
+            if (callback && VueWebLoader.registeredComponent[url]) {
+                callback(VueWebLoader.registeredComponent[url]);
+                return;
+            }
+
             // 如果是vue组件
             if (url.endsWith('.vue')) {
                 requestVue(url, callback);
