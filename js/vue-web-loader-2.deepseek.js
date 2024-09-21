@@ -305,13 +305,53 @@
                 callback(VueWebLoader.registeredComponent[url]);
                 return;
             }
-            
+
             if (url.endsWith('.vue')) {
                 requestVue(url, callback);
             } else if (url.endsWith('.js')) {
                 requestJs(url, callback);
             }
-        }
+        },
+        importList: function(urlList, stepCallback, finalCallback) {
+
+            function loadNextUrl(index) {
+                if (index >= urlList.length) {
+                    // 所有地址都加载完成
+                    finalCallback();
+                    return;
+                }
+
+                var url = parseAbsoluteUrl(urlList[index], baseUrl)
+
+                // 模拟异步加载地址
+                new Promise(function(resolve) {
+
+                    if (VueWebLoader.registeredComponent[url]) {
+                        resolve();
+                        return;
+                    }
+
+                    if (url.endsWith('.vue')) {
+                        requestVue(url, function() { resolve(); });
+                    } else if (url.endsWith('.js')) {
+                        requestJs(url, function() { resolve(); });
+                    }
+
+                }).then(function() {
+                    // 调用step回调函数
+                    stepCallback(url, VueWebLoader.registeredComponent[url]);
+                    // 加载下一个地址
+                    loadNextUrl(index + 1);
+                }).catch(function(error) {
+                    console.error(error);
+                    // 加载下一个地址
+                    loadNextUrl(index + 1);
+                });
+            }
+
+            // 从第一个地址开始加载
+            loadNextUrl(0);
+        },
     });
 
 })(window, document, Vue);
